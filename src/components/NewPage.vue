@@ -2,12 +2,13 @@
   <div class="new-page">
     <h1></h1>
 
-    <div class="lists-container">
+  <div class="lists-container">
       <div class="list-section">
         <div class="list-header" @click="toggleList('showComidas')">
           <span>Comidas</span>
           <span>{{ showComidas ? '▲' : '▼' }}</span>
         </div>
+        <button @click="modificarBebidas" class="modify-button">Modificar comidas</button>
         <div v-if="showComidas" class="list-content">
           <ul>
             <li v-for="item in comidas" :key="item">
@@ -26,6 +27,7 @@
           <span>Bebidas</span>
           <span>{{ showBebidas ? '▲' : '▼' }}</span>
         </div>
+        <button @click="modificarBebidas" class="modify-button">Modificar bebidas</button>
         <div v-if="showBebidas" class="list-content">
           <ul>
             <li v-for="item in bebidas" :key="item">
@@ -44,6 +46,7 @@
           <span>Postres</span>
           <span>{{ showPostres ? '▲' : '▼' }}</span>
         </div>
+        <button @click="modificarPostres" class="modify-button">Modificar postres</button>
         <div v-if="showPostres" class="list-content">
           <ul>
             <li v-for="item in postres" :key="item">
@@ -56,9 +59,31 @@
           </ul>
         </div>
       </div>
+
+      <div class="list-section">
+        <div class="list-header" @click="toggleList('showAlmuerzos')">
+          <span>Almuerzos</span>
+          <span>{{ showAlmuerzos ? '▲' : '▼' }}</span>
+        </div>
+        <button @click="modificarAlmuerzos" class="modify-button">Modificar almuerzos</button>
+        <div v-if="showAlmuerzos" class="list-content">
+          <ul>
+            <li v-for="item in almuerzos" :key="item">
+              <label class="custom-checkbox">
+                <input type="checkbox" :value="item" v-model="selectedAlmuerzos" />
+                <div class="checkbox-box"></div>
+                <span>{{ item }}</span>
+              </label>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
 
-    <button @click="goBack" class="back-button">Volver al Login</button>
+
+<div class="box-button" @click="guardarSeleccion">
+  <div class="button"><span>Guardar selección</span></div>
+</div>
   </div>
 </template>
 
@@ -73,9 +98,13 @@ export default {
       selectedComidas: [],
       selectedBebidas: [],
       selectedPostres: [],
+      showAlmuerzos: false,
+      selectedAlmuerzos: [],
+      
       comidas: ['Tacos', 'Enchiladas', 'Quesadillas'],
       bebidas: ['Agua', 'Jugo de naranja', 'Café'],
       postres: ['Flan', 'Churros', 'Helado'],
+      almuerzos: ['Ensalada César', 'Sándwich de pollo', 'Pasta al pesto'],
       hoverList: null,
     };
   },
@@ -92,6 +121,39 @@ export default {
     clearHover() {
       this.hoverList = null;
     },
+    guardarSeleccion() {
+      const seleccion = {
+        comidas: this.selectedComidas,
+        bebidas: this.selectedBebidas,
+        postres: this.selectedPostres,
+        almuerzos: this.selectedAlmuerzos,
+      };
+      alert('Selección guardada: ' + JSON.stringify(seleccion, null, 2));
+    },
+    modificarComidas() {
+      const nuevaComida = prompt('Ingrese una nueva comida para agregar:');
+      if (nuevaComida && nuevaComida.trim() !== '') {
+        this.comidas.push(nuevaComida.trim());
+      }
+    },
+    modificarBebidas() {
+      const nuevaBebida = prompt('Ingrese una nueva bebida para agregar:');
+      if (nuevaBebida && nuevaBebida.trim() !== '') {
+        this.bebidas.push(nuevaBebida.trim());
+      }
+    },
+    modificarPostres() {
+      const nuevoPostre = prompt('Ingrese un nuevo postre para agregar:');
+      if (nuevoPostre && nuevoPostre.trim() !== '') {
+        this.postres.push(nuevoPostre.trim());
+      }
+    },
+    modificarAlmuerzos() {
+      const nuevoAlmuerzo = prompt('Ingrese un nuevo almuerzo para agregar:');
+      if (nuevoAlmuerzo && nuevoAlmuerzo.trim() !== '') {
+        this.almuerzos.push(nuevoAlmuerzo.trim());
+      }
+    },
   },
 };
 </script>
@@ -101,15 +163,16 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 50px;
+  margin-top: 100px;
+  margin-bottom: 200px;
   padding: 20px;
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
-  border-radius: 8px;
-  max-width: 500px;
+  border-radius: 20px;
+  max-width: 900px;
   margin-left: auto;
   margin-right: auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 12px rgba(0, 0, 0, 0.1);
 }
 
 .lists-container {
@@ -211,6 +274,24 @@ export default {
   opacity: 1;
 }
 
+.back-button, .save-button, .modify-button {
+  color: #090909;
+  padding: 0.7em 1.7em;
+  font-size: 18px;
+  border-radius: 0.5em;
+  background: #e8e8e8;
+  cursor: pointer;
+  border: 1px solid #e8e8e8;
+  transition: all 0.3s;
+  box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+  margin-top: 10px;
+}
+
+.back-button:active, .save-button:active, .modify-button:active {
+  color: #666;
+  box-shadow: inset 4px 4px 12px #c5c5c5, inset -4px -4px 12px #ffffff;
+}
+
 .back-button {
   background-color: #007bff;
   color: white;
@@ -224,5 +305,50 @@ export default {
 
 .back-button:hover {
   background-color: #0056b3;
+}
+.save-button {
+  background-color: #a72896;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.save-button:hover {
+  background-color: #1e7e34;
+}
+.button {
+  width: 150px;
+  padding: 0;
+  border: none;
+  transform: rotate(5deg);
+  transform-origin: center;
+  font-family: "Gochi Hand", cursive;
+  text-decoration: none;
+  font-size: 15px;
+  cursor: pointer;
+  padding-bottom: 3px;
+  border-radius: 5px;
+  box-shadow: 0 2px 0 #494a4b;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  background-color: #a33b8d;
+}
+
+.button span {
+  background: #f1f5f8;
+  display: block;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: 2px solid #494a4b;
+}
+
+.button:active {
+  transform: translateY(5px);
+  padding-bottom: 0px;
+  outline: 0;
 }
 </style>
