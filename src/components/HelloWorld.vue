@@ -1,6 +1,6 @@
 <template>
   <div class="new-page">
-    <h1></h1>
+    <h1>Votaciones</h1>
 
     <div class="lists-container">
       <div class="list-section">
@@ -57,8 +57,6 @@
         </div>
       </div>
     </div>
-
-    <button @click="goBack" class="back-button">Volver al Login</button>
   </div>
 </template>
 
@@ -80,9 +78,6 @@ export default {
     };
   },
   methods: {
-    goBack() {
-      this.$router.push('/');
-    },
     toggleList(listName) {
       this[listName] = !this[listName];
     },
@@ -101,15 +96,22 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 50px;
+  margin-top: 20px;
   padding: 20px;
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
-  border-radius: 8px;
-  max-width: 500px;
+  border-radius: 15px;
+  max-width: 800px;
   margin-left: auto;
   margin-right: auto;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.new-page h1 {
+  color: #6a11cb;
+  margin-bottom: 20px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
 }
 
 .lists-container {
@@ -209,20 +211,5 @@ export default {
 
 .custom-checkbox input[type="checkbox"]:checked + .checkbox-box::after {
   opacity: 1;
-}
-
-.back-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-}
-
-.back-button:hover {
-  background-color: #0056b3;
 }
 </style>
