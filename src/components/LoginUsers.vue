@@ -4,6 +4,7 @@
       <input class="input" v-model="username" placeholder="Username" type="text" required>
       <input class="input" v-model="password" placeholder="Password" type="password" required> 
       <button class="btn" type="submit">Submit</button>
+      <p class="register-link">¿No tienes cuenta? <a href="#" @click.prevent="goToRegister">Regístrate</a></p>
     </form>
   </template>
   
@@ -22,6 +23,9 @@
               console.log('Username:', this.username);
               console.log('Password:', this.password);
               // Aquí puedes agregar la lógica para enviar los datos al backend
+          },
+          goToRegister() {
+              this.$router.push('/register');
           }
       }
   };
@@ -100,5 +104,22 @@
       transition: .2s;
       transform: translateX(0em) translateY(0em);
       box-shadow: none;
+  }
+  
+  .register-link {
+      text-align: center;
+      margin-top: 1em;
+      font-size: 0.9em;
+      color: #555;
+  }
+  
+  .register-link a {
+      color: #7c3aed;
+      text-decoration: none;
+      font-weight: bold;
+  }
+  
+  .register-link a:hover {
+      text-decoration: underline;
   }
   </style>

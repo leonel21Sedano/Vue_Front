@@ -24,6 +24,13 @@
         <div class="button-bottom"></div>
         <div class="button-base"></div>
       </button>
+      <button class="button-3d" @click="goToRegister">
+        <div class="button-top">
+          <span class="material-icons">👤+</span>
+        </div>
+        <div class="button-bottom"></div>
+        <div class="button-base"></div>
+      </button>
     </div>
   </div>
 </template>
@@ -40,6 +47,9 @@ export default {
     },
     goToNewPage() {
       this.$router.push('/new-page');
+    },
+    goToRegister() {
+      this.$router.push('/register');
     },
   },
 };
