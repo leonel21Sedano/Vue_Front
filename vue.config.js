@@ -3,9 +3,8 @@ module.exports = {
     proxy: {
       '/api': {
         target: 'http://localhost:8081', // URL de tu backend
-        changeOrigin: true,
-        pathRewrite: { '^/api': '' },
-      },
-    },
-  },
+        changeOrigin: true
+      }
+    }
+  }
 };

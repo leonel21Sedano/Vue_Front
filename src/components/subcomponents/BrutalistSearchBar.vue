@@ -51,7 +51,7 @@ export default {
   border-radius: 0;
   outline: none;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  box-shadow: 5px 5px 0 #000, 10px 10px 0 #4a90e2;
+  box-shadow: 5px 5px 0 #000, 10px 10px 0   #6a11cb;
 }
 
 @keyframes glitch {

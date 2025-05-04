@@ -1,40 +1,100 @@
 <template>
   <form class="form" @submit.prevent="handleSubmit">
     <p class="heading">Registro</p>
-    <input class="input" v-model="nombre" placeholder="Nombre" type="text" required>
-    <input class="input" v-model="apellidos" placeholder="Apellidos" type="text" required>
-    <input class="input" v-model="correo" placeholder="Correo" type="email" required>
-    <input class="input" v-model="contraseña" placeholder="Contraseña" type="password" required>
-    <input class="input" v-model="codigoEstudiante" placeholder="Código Estudiante" type="text" required>
-    <button class="btn" type="submit">Registrar</button>
+    
+    <!-- Mensajes de estado -->
+    <div v-if="errorMessage" class="message error-message">{{ errorMessage }}</div>
+    <div v-if="successMessage" class="message success-message">{{ successMessage }}</div>
+    
+    <input class="input" v-model="nombre" placeholder="Nombre" type="text" required :disabled="loading">
+    <input class="input" v-model="apellidos" placeholder="Apellidos" type="text" required :disabled="loading">
+    <input class="input" v-model="correo" placeholder="Correo" type="email" required :disabled="loading">
+    <input class="input" v-model="contraseña" placeholder="Contraseña" type="password" required :disabled="loading" minlength="6">
+    <input class="input" v-model="codigoEstudiante" placeholder="Código Estudiante" type="text" required :disabled="loading" pattern="[0-9]{9}">
+    
+    <button class="btn" type="submit" :disabled="loading">
+      {{ loading ? 'Procesando...' : 'Registrar' }}
+    </button>
   </form>
 </template>
   
 <script>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import AuthService from '../services/AuthService';
+
 export default {
   name: 'RegisterUser',
-  data() {
-    return {
-      nombre: '',
-      apellidos: '',
-      correo: '',
-      contraseña: '',
-      codigoEstudiante: ''
+  setup() {
+    const router = useRouter();
+    
+    // Mantener las variables reactivas con los mismos nombres
+    const nombre = ref('');
+    const apellidos = ref('');
+    const correo = ref('');
+    const contraseña = ref('');
+    const codigoEstudiante = ref('');
+    
+    // Variables para estados de UI
+    const loading = ref(false);
+    const errorMessage = ref('');
+    const successMessage = ref('');
+
+    const handleSubmit = async () => {
+      loading.value = true;
+      errorMessage.value = '';
+      successMessage.value = '';
+      
+      try {
+        const userData = {
+          nombre: nombre.value,
+          apellidos: apellidos.value,
+          correo: correo.value,
+          contraseña: contraseña.value,
+          codigoEstudiante: codigoEstudiante.value
+        };
+        
+        // Debug - muestra lo que estamos enviando al servidor
+        console.log('Enviando datos:', JSON.stringify(userData));
+        
+        // Llamar al servicio de registro
+        await AuthService.registro(userData);
+        
+        // Mostrar mensaje de éxito
+        successMessage.value = '¡Registro exitoso! Redirigiendo al login...';
+        
+        // Redireccionar al login después de un breve delay
+        setTimeout(() => {
+          router.push('/login');
+        }, 2000);
+        
+      } catch (error) {
+        console.error('Error durante el registro:', error);
+        
+        // Siempre usamos el mensaje personalizado del interceptor
+        errorMessage.value = error.message;
+        
+        // Pero aún así registramos detalles completos para depuración
+        if (error.response) {
+          console.error('Estado:', error.response.status);
+          console.error('Datos:', error.response.data);
+        }
+      } finally {
+        loading.value = false;
+      }
     };
-  },
-  methods: {
-    handleSubmit() {
-      // Handle registration logic here
-      const userData = {
-        nombre: this.nombre,
-        apellidos: this.apellidos,
-        correo: this.correo,
-        contraseña: this.contraseña,
-        codigoEstudiante: this.codigoEstudiante
-      };
-      console.log('User data:', userData);
-      // Aquí puedes agregar la lógica para enviar los datos al backend
-    }
+
+    return {
+      nombre,
+      apellidos,
+      correo,
+      contraseña,
+      codigoEstudiante,
+      loading,
+      errorMessage,
+      successMessage,
+      handleSubmit
+    };
   }
 };
 </script>
@@ -112,5 +172,25 @@ export default {
   transition: .2s;
   transform: translateX(0em) translateY(0em);
   box-shadow: none;
+}
+
+.message {
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+.success-message {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
 }
 </style>
