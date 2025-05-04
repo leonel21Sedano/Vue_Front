@@ -151,7 +151,7 @@
     
     <div class="submit-container">
       <div class="box-button" @click="guardarOpciones">
-        <div class="button"><span>Guardar Opciones</span></div>
+        <div class="button-inner"><span>Guardar Opciones</span></div>
       </div>
     </div>
   </div>
@@ -237,6 +237,7 @@ export default {
   margin-bottom: 30px;
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
+  font-size: 2.2rem;
   text-align: center;
 }
 
@@ -281,6 +282,7 @@ export default {
   margin-top: 0;
   color: #6a11cb;
   font-size: 1.1rem;
+  font-family: 'Poppins', sans-serif;
   margin-bottom: 15px;
 }
 
@@ -288,9 +290,17 @@ export default {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  border: 2px solid #c0a2e4;
+  border-radius: 8px;
   font-size: 1rem;
+  font-family: Arial, sans-serif;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.text-input:focus {
+  border-color: #6a11cb;
+  box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.2);
 }
 
 .file-input {
@@ -341,15 +351,20 @@ export default {
   text-align: center;
 }
 
-.button {
+.box-button:hover {
+  transform: translateY(-2px);
+}
+
+.button-inner {
   background-color: #dddddd;
   border: 4px solid #fff;
   padding: 3px 8px;
 }
 
-.button span {
+.button-inner span {
   font-size: 1.2em;
   letter-spacing: 1px;
+  font-family: Arial, sans-serif;
 }
 
 .box-button:active {

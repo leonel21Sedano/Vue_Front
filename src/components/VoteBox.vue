@@ -14,7 +14,7 @@
         <slot name="left-votes"></slot>
       </p>
       <div class="box-button" @click="voteLeft">
-        <div class="button"><span>Votar</span></div>
+        <div class="button-inner"><span>Votar</span></div>
       </div>
     </div>
     
@@ -34,7 +34,7 @@
         <slot name="right-votes"></slot>
       </p>
       <div class="box-button" @click="voteRight">
-        <div class="button"><span>Votar</span></div>
+        <div class="button-inner"><span>Votar</span></div>
       </div>
     </div>
   </div>
@@ -116,6 +116,7 @@ export default {
   min-height: 40px;
   display: flex;
   align-items: center;
+  font-family: 'Poppins', sans-serif;
 }
 
 .vote-count {
@@ -123,6 +124,7 @@ export default {
   color: #6a11cb;
   margin: 0;
   font-size: 1.1rem;
+  font-family: Arial, sans-serif;
 }
 
 .vs-image {
@@ -134,7 +136,7 @@ export default {
 .box-button {
   cursor: pointer;
   border: 4px solid black;
-  background-color: gray;
+  background-color: #6a11cb;
   padding-bottom: 10px;
   transition: 0.1s ease-in-out;
   user-select: none;
@@ -142,15 +144,20 @@ export default {
   text-align: center;
 }
 
-.button {
+.box-button:hover {
+  transform: translateY(-2px);
+}
+
+.button-inner {
   background-color: #dddddd;
   border: 4px solid #fff;
   padding: 3px 8px;
 }
 
-.button span {
+.button-inner span {
   font-size: 1.2em;
   letter-spacing: 1px;
+  font-family: Arial, sans-serif;
 }
 
 .box-button:active {

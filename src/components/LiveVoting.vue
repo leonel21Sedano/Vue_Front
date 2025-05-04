@@ -129,6 +129,7 @@ export default {
   margin-bottom: 30px;
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
+  font-size: 2.2rem;
   text-align: center;
 }
 

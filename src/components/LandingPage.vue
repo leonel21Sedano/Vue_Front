@@ -5,8 +5,12 @@
       <h1 class="hero-title">Bienvenido a CPT</h1>
       <p class="hero-subtitle">Tu plataforma para elegir las mejores opciones gastronómicas</p>
       <div class="cta-buttons">
-        <button class="btn primary-btn" @click="goToRegister">Crear Cuenta</button>
-        <button class="btn secondary-btn" @click="goToLogin">Iniciar Sesión</button>
+        <div class="box-button" @click="goToRegister">
+          <div class="button-inner"><span>Crear Cuenta</span></div>
+        </div>
+        <div class="box-button secondary" @click="goToLogin">
+          <div class="button-inner"><span>Iniciar Sesión</span></div>
+        </div>
       </div>
     </div>
 
@@ -110,7 +114,7 @@ export default {
   font-size: 3rem;
   font-weight: 700;
   margin-bottom: 15px;
-  color: #FF8A00;
+  color: #6a11cb;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
 }
 
@@ -124,41 +128,51 @@ export default {
 .cta-buttons {
   display: flex;
   gap: 20px;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
-.btn {
-  padding: 12px 30px;
-  border-radius: 30px;
-  font-size: 1rem;
-  font-weight: 600;
+/* Nuevos estilos consistentes para los botones */
+.box-button {
   cursor: pointer;
-  transition: all 0.3s ease;
-  border: none;
+  border: 4px solid black;
+  background-color: #6a11cb;
+  padding-bottom: 10px;
+  transition: 0.1s ease-in-out;
+  user-select: none;
+  width: 180px;
+  text-align: center;
+  margin: 0 10px;
 }
 
-.primary-btn {
-  background: linear-gradient(145deg, #FF8A00, #FF5E03);
-  color: white;
-  box-shadow: 0 4px 15px rgba(255, 94, 3, 0.3);
+.box-button.secondary {
+  background-color: #a72896;
 }
 
-.primary-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(255, 94, 3, 0.4);
-}
-
-.secondary-btn {
-  background: white;
-  color: #FF8A00;
-  border: 2px solid #FF8A00;
-}
-
-.secondary-btn:hover {
-  background: #FFF0E0;
+.box-button:hover {
   transform: translateY(-3px);
 }
 
+.button-inner {
+  background-color: #dddddd;
+  border: 4px solid #fff;
+  padding: 8px 12px;
+}
+
+.button-inner span {
+  font-size: 1.2em;
+  letter-spacing: 1px;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  color: #000;
+}
+
+.box-button:active {
+  padding: 0;
+  margin-bottom: 10px;
+  transform: translateY(10px);
+}
+
+/* Aplicamos los mismos estilos de fuentes a los títulos de secciones */
 .info-section {
   display: flex;
   gap: 30px;
@@ -190,12 +204,15 @@ export default {
 .info-card h2 {
   font-size: 1.5rem;
   margin-bottom: 15px;
-  color: #FF8A00;
+  color: #6a11cb;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
 }
 
 .info-card p {
   color: #666;
   line-height: 1.6;
+  font-family: Arial, sans-serif;
 }
 
 .features-section {
@@ -206,9 +223,11 @@ export default {
 .section-title {
   font-size: 2.2rem;
   margin-bottom: 40px;
-  color: #FF8A00;
+  color: #6a11cb;
   position: relative;
   display: inline-block;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
 }
 
 .section-title:after {
@@ -216,7 +235,7 @@ export default {
   position: absolute;
   width: 60%;
   height: 4px;
-  background: linear-gradient(to right, #FF8A00, #FF5E03);
+  background: #6a11cb;
   bottom: -10px;
   left: 20%;
   border-radius: 2px;
@@ -249,12 +268,15 @@ export default {
 .feature h3 {
   font-size: 1.2rem;
   margin-bottom: 10px;
-  color: #FF8A00;
+  color: #6a11cb;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
 }
 
 .feature p {
   color: #777;
   font-size: 0.9rem;
+  font-family: Arial, sans-serif;
 }
 
 .footer {
@@ -263,6 +285,7 @@ export default {
   margin-top: 50px;
   border-top: 1px solid #eee;
   color: #888;
+  font-family: Arial, sans-serif;
 }
 
 @media (max-width: 768px) {
@@ -276,12 +299,12 @@ export default {
   
   .cta-buttons {
     flex-direction: column;
+    align-items: center;
     width: 100%;
-    max-width: 300px;
   }
   
-  .btn {
-    width: 100%;
+  .box-button {
+    margin-bottom: 15px;
   }
 }
 </style>
