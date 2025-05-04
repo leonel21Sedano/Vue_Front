@@ -11,23 +11,40 @@
             <span class="nav-icon">🏠</span>
             <span class="nav-text">Inicio</span>
           </div>
-          <div class="nav-link" @click="goToLogin">
-            <span class="nav-icon">🔑</span>
-            <span class="nav-text">Iniciar Sesión</span>
-          </div>
-          <div class="nav-link" @click="goToRegister">
-            <span class="nav-icon">👤</span>
-            <span class="nav-text">Registrarse</span>
-          </div>
-          <div class="nav-link" @click="goToLiveVoting"> <!-- Cambiado de goToHello a goToLiveVoting -->
+          
+          <!-- Links condicionales según autenticación -->
+          <template v-if="!currentUser">
+            <div class="nav-link" @click="goToLogin">
+              <span class="nav-icon">🔑</span>
+              <span class="nav-text">Iniciar Sesión</span>
+            </div>
+            <div class="nav-link" @click="goToRegister">
+              <span class="nav-icon">👤</span>
+              <span class="nav-text">Registrarse</span>
+            </div>
+          </template>
+          
+          <!-- Información del usuario y botón de logout -->
+          <template v-else>
+            <div class="user-greeting">
+              <span class="greeting-text">¡Hola, {{ currentUser.nombre }}!</span>
+            </div>
+            <div class="nav-link logout" @click="logout">
+              <span class="nav-icon">🚪</span>
+              <span class="nav-text">Cerrar Sesión</span>
+            </div>
+          </template>
+          
+          <!-- Links condicionales según rol -->
+          <div v-if="currentUser" class="nav-link" @click="goToLiveVoting">
             <span class="nav-icon">📋</span>
             <span class="nav-text">Votaciones</span>
           </div>
-          <div class="nav-link" @click="goToPost">
+          <div v-if="isEncargadoOrAdmin" class="nav-link" @click="goToPost">
             <span class="nav-icon">⭐</span>
             <span class="nav-text">Administrar</span>
           </div>
-          <div class="nav-link" @click="goToUserManagement">
+          <div v-if="isAdmin" class="nav-link" @click="goToUserManagement">
             <span class="nav-icon">👥</span>
             <span class="nav-text">Usuarios</span>
           </div>
@@ -42,28 +59,60 @@
     </nav>
 
     <div class="content-container">
-      <router-view />
+      <router-view @login-success="updateCurrentUser" />
     </div>
   </div>
 </template>
 
 <script>
+import AuthService from './services/AuthService';
+
 export default {
   name: 'App',
   data() {
     return {
       hasScrolled: false,
       menuOpen: false,
+      currentUser: null
     }
+  },
+  computed: {
+    isAdmin() {
+      return this.currentUser && this.currentUser.rol === 'ADMIN';
+    },
+    isEncargadoOrAdmin() {
+      return this.currentUser && (this.currentUser.rol === 'ADMIN' || this.currentUser.rol === 'ENCARGADO');
+    }
+  },
+  created() {
+    // Intentar cargar el usuario actual del localStorage al iniciar
+    this.updateCurrentUser();
+    
+    // Escuchar eventos de almacenamiento (si se inicia sesión en otra pestaña)
+    window.addEventListener('storage', (event) => {
+      if (event.key === 'user') {
+        this.updateCurrentUser();
+      }
+    });
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll);
   },
-  // Change this lifecycle hook from beforeDestroy to beforeUnmount
   beforeUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('storage', this.updateCurrentUser);
   },
   methods: {
+    updateCurrentUser() {
+      console.log('Actualizando datos de usuario actual...');
+      this.currentUser = AuthService.getCurrentUser();
+      console.log('Usuario actual:', this.currentUser);
+    },
+    logout() {
+      AuthService.logout();
+      this.updateCurrentUser();
+      this.$router.push('/');
+    },
     handleScroll() {
       this.hasScrolled = window.scrollY > 50;
     },
@@ -86,8 +135,8 @@ export default {
       this.$router.push('/register');
       this.menuOpen = false;
     },
-    goToLiveVoting() { // Cambio de nombre del método
-      this.$router.push('/live'); // La ruta sigue siendo la misma
+    goToLiveVoting() {
+      this.$router.push('/live');
       this.menuOpen = false;
     },
     goToUserManagement() {
@@ -277,6 +326,48 @@ export default {
   
   .nav-icon {
     font-size: 1.2rem;
+  }
+}
+
+/* Agregar estilos para la información del usuario */
+.user-greeting {
+  display: flex;
+  align-items: center;
+  background-color: rgba(106, 17, 203, 0.1);
+  padding: 6px 12px;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  margin-right: 10px;
+}
+
+.greeting-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #6a11cb;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+.nav-link.logout {
+  color: #e53935;
+}
+
+.nav-link.logout .nav-text {
+  color: #e53935;
+}
+
+/* Mantener los estilos responsivos */
+@media (max-width: 768px) {
+  .user-greeting {
+    padding: 4px 8px;
+    margin-right: 5px;
+  }
+  
+  .greeting-text {
+    font-size: 0.75rem;
+    max-width: 100px;
   }
 }
 </style>

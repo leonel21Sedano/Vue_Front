@@ -139,6 +139,7 @@ class AuthService {
     }).then(response => {
       // Si hay un token en la respuesta, guarda el usuario en localStorage
       if (response.data.token) {
+        // Guardamos el objeto completo que incluye token, nombre, rol, etc.
         localStorage.setItem('user', JSON.stringify(response.data));
       }
       return response.data;
