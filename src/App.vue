@@ -19,7 +19,7 @@
             <span class="nav-icon">👤</span>
             <span class="nav-text">Registrarse</span>
           </div>
-          <div class="nav-link" @click="goToHello">
+          <div class="nav-link" @click="goToLiveVoting"> <!-- Cambiado de goToHello a goToLiveVoting -->
             <span class="nav-icon">📋</span>
             <span class="nav-text">Votaciones</span>
           </div>
@@ -84,6 +84,10 @@ export default {
     },
     goToRegister() {
       this.$router.push('/register');
+      this.menuOpen = false;
+    },
+    goToLiveVoting() { // Cambio de nombre del método
+      this.$router.push('/live'); // La ruta sigue siendo la misma
       this.menuOpen = false;
     },
   },
