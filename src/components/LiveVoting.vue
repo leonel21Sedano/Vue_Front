@@ -1,74 +1,90 @@
 <template>
   <div class="vote-page">
     <h1 class="page-title">Votaciones en Vivo</h1>
-
+    
     <!-- Primera votación: Comidas -->
-    <h2 class="section-title">Comidas del Dia</h2>
-    <div class="options-container">
-      <SingleVoteBox
-        v-for="(option, index) in votingOptions.comidas"
-        :key="'comidas-' + index"
-        id="comidas"
-        :option="option"
-        @vote="handleSingleVote"
-      />
-    </div>
-
+    <h2 class="section-title">Comidas del Día</h2>
+    <VoteBox 
+      id="comidas" 
+      :leftOption="votingOptions.comidas[0]" 
+      :rightOption="votingOptions.comidas[1]"
+      @vote="handleVote"
+    >
+      <template #left-name>{{ votingOptions.comidas[0].name }}</template>
+      <template #left-image>
+        <img :src="votingOptions.comidas[0].image" :alt="votingOptions.comidas[0].name" style="width: 100%; height: 100%; object-fit: cover;" />
+      </template>
+      <template #left-votes>Votos: {{ votingOptions.comidas[0].votes }}</template>
+      
+      <template #right-name>{{ votingOptions.comidas[1].name }}</template>
+      <template #right-image>
+        <img :src="votingOptions.comidas[1].image" :alt="votingOptions.comidas[1].name" style="width: 100%; height: 100%; object-fit: cover;" />
+      </template>
+      <template #right-votes>Votos: {{ votingOptions.comidas[1].votes }}</template>
+    </VoteBox>
+    
     <!-- Segunda votación: Bebidas -->
-    <h2 class="section-title">Bebidas del Dia</h2>
-    <div class="options-container">
-      <SingleVoteBox
-        v-for="(option, index) in votingOptions.bebidas"
-        :key="'bebidas-' + index"
-        id="bebidas"
-        :option="option"
-        @vote="handleSingleVote"
-      />
-    </div>
-
+    <h2 class="section-title">Bebidas del Día</h2>
+    <VoteBox 
+      id="bebidas" 
+      :leftOption="votingOptions.bebidas[0]" 
+      :rightOption="votingOptions.bebidas[1]"
+      @vote="handleVote"
+    >
+      <template #left-name>{{ votingOptions.bebidas[0].name }}</template>
+      <template #left-image>
+        <img :src="votingOptions.bebidas[0].image" :alt="votingOptions.bebidas[0].name" style="width: 100%; height: 100%; object-fit: cover;" />
+      </template>
+      <template #left-votes>Votos: {{ votingOptions.bebidas[0].votes }}</template>
+      
+      <template #right-name>{{ votingOptions.bebidas[1].name }}</template>
+      <template #right-image>
+        <img :src="votingOptions.bebidas[1].image" :alt="votingOptions.bebidas[1].name" style="width: 100%; height: 100%; object-fit: cover;" />
+      </template>
+      <template #right-votes>Votos: {{ votingOptions.bebidas[1].votes }}</template>
+    </VoteBox>
+    
     <!-- Tercera votación: Postres -->
-    <h2 class="section-title">Postres del Dia</h2>
-    <div class="options-container">
-      <SingleVoteBox
-        v-for="(option, index) in votingOptions.postres"
-        :key="'postres-' + index"
-        id="postres"
-        :option="option"
-        @vote="handleSingleVote"
-      />
-    </div>
+    <h2 class="section-title">Postres del Día</h2>
+    <VoteBox 
+      id="postres" 
+      :leftOption="votingOptions.postres[0]" 
+      :rightOption="votingOptions.postres[1]"
+      @vote="handleVote"
+    >
+      <template #left-name>{{ votingOptions.postres[0].name }}</template>
+      <template #left-image>
+        <img :src="votingOptions.postres[0].image" :alt="votingOptions.postres[0].name" style="width: 100%; height: 100%; object-fit: cover;" />
+      </template>
+      <template #left-votes>Votos: {{ votingOptions.postres[0].votes }}</template>
+      
+      <template #right-name>{{ votingOptions.postres[1].name }}</template>
+      <template #right-image>
+        <img :src="votingOptions.postres[1].image" :alt="votingOptions.postres[1].name" style="width: 100%; height: 100%; object-fit: cover;" />
+      </template>
+      <template #right-votes>Votos: {{ votingOptions.postres[1].votes }}</template>
+    </VoteBox>
   </div>
 </template>
 
 <script>
-import SingleVoteBox from './SingleVoteBox.vue';
+import VoteBox from './VoteBox.vue';
 
 export default {
   name: 'LiveVoting',
   components: {
-    SingleVoteBox
+    VoteBox
   },
   data() {
     return {
-      showComidas: false,
-      showBebidas: false,
-      showPostres: false,
-      selectedComidas: [],
-      selectedBebidas: [],
-      selectedPostres: [],
-      comidas: ['Tacos', 'Enchiladas', 'Quesadillas'],
-      bebidas: ['Agua', 'Jugo de naranja', 'Café'],
-      postres: ['Flan', 'Churros', 'Helado'],
-      hoverList: null,
-
       // Datos para las votaciones
       votingOptions: {
         comidas: [
           { id: 0, name: 'Tacos', votes: 15, image: require('../assets/Delicious Tacos Al Pastor.jpeg') },
-          { id: 1, name: 'Hamburguesa', votes: 12, image: require('../assets/Recette de hamburger et de frites Double Smash paresseux 🍔🍟 Ingrédients _ Pour les hamburgers Double Smash _ 1 lb de bœuf haché (mélange 80_20 recommandé) 🍖 Sel et poivre, au goût 🧂 4 tranches de fromage (amér.jpeg') }
+          { id: 1, name: 'Hamburguesa', votes: 12, image: require('../assets/Hamburguesa.jpeg') }
         ],
         bebidas: [
-          { id: 0, name: 'Agua Fresca', votes: 8, image: require('../assets/vs.png') },
+          { id: 0, name: 'Agua Fresca', votes: 8, image: require('../assets/logo.png') },
           { id: 1, name: 'Refresco', votes: 10, image: require('../assets/logo.png') }
         ],
         postres: [
@@ -79,23 +95,13 @@ export default {
     };
   },
   methods: {
-    toggleList(listName) {
-      this[listName] = !this[listName];
-    },
-    setHover(listName) {
-      this.hoverList = listName;
-    },
-    clearHover() {
-      this.hoverList = null;
-    },
-    handleSingleVote(voteData) {
+    handleVote(voteData) {
       console.log('Voto registrado:', voteData);
-
-      const { id, optionId } = voteData;
-      const option = this.votingOptions[id].find(opt => opt.id === optionId);
-      if (option) {
-        option.votes += 1;
-      }
+      
+      const { id, selection } = voteData;
+      const optionIndex = selection === 'left' ? 0 : 1;
+      this.votingOptions[id][optionIndex].votes += 1;
+      
       // Aquí se podría agregar lógica para enviar el voto al backend
     }
   }

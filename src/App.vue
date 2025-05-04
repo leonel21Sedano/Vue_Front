@@ -23,7 +23,7 @@
             <span class="nav-icon">📋</span>
             <span class="nav-text">Votaciones</span>
           </div>
-          <div class="nav-link" @click="goToNewPage">
+          <div class="nav-link" @click="goToPost">
             <span class="nav-icon">⭐</span>
             <span class="nav-text">Administrar</span>
           </div>
@@ -78,12 +78,8 @@ export default {
       this.$router.push('/login');
       this.menuOpen = false;
     },
-    goToHello() {
-      this.$router.push('/hello');
-      this.menuOpen = false;
-    },
-    goToNewPage() {
-      this.$router.push('/new-page');
+    goToPost() {
+      this.$router.push('/post-food');
       this.menuOpen = false;
     },
     goToRegister() {
