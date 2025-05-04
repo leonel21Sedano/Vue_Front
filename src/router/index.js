@@ -4,6 +4,7 @@ import LiveVoting from '../components/LiveVoting.vue'; // Actualiza la ruta al n
 import NewPage from '../components/NewPage.vue';
 import RegisterUser from '../components/RegisterUser.vue';
 import LandingPage from '../components/LandingPage.vue';
+import UserManagement from '../components/UserManagement.vue';
 
 const routes = [
   { path: '/', component: LandingPage },
@@ -11,6 +12,7 @@ const routes = [
   { path: '/live', component: LiveVoting }, // Usamos el nuevo nombre de componente
   { path: '/new-page', component: NewPage },
   { path: '/register', component: RegisterUser },
+  { path: '/users', component: UserManagement },
 ];
 
 const router = createRouter({

@@ -1,12 +1,10 @@
-<template>
+ <template>
   <div class="voting-container">
     <div class="team-column">
       <h3 class="option-name">
         <slot name="left-name"></slot>
       </h3>
-      <div class="team-box left-team">
-        <slot name="left-content"></slot>
-      </div>
+      <img src="../assets/Delicious Tacos Al Pastor.jpeg" alt="Tacos" style="width: 100px; margin-bottom: 10px;" />
       <p class="vote-count">
         <slot name="left-votes"></slot>
       </p>
@@ -18,15 +16,10 @@
     <img src="../assets/vs.png" alt="VS" class="vs-image" />
     
     <div class="team-column">
-      <h3 class="option-name">
-        <slot name="right-name"></slot>
-      </h3>
-      <div class="team-box right-team">
-        <slot name="right-content"></slot>
-      </div>
-      <p class="vote-count">
-        <slot name="right-votes"></slot>
-      </p>
+    <h3 class="option-name">
+      <slot name="right-name"></slot>
+    </h3>
+    <img src="../assets/Recette de hamburger et de frites Double Smash paresseux 🍔🍟 Ingrédients _ Pour les hamburgers Double Smash _ 1 lb de bœuf haché (mélange 80_20 recommandé) 🍖 Sel et poivre, au goût 🧂 4 tranches de fromage (amér.jpeg" alt="Hamburguesas" style="width: 100px; margin-bottom: 10px;" />
       <div class="box-button" @click="voteRight">
         <div class="button"><span>Votar</span></div>
       </div>

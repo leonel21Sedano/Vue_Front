@@ -27,6 +27,10 @@
             <span class="nav-icon">⭐</span>
             <span class="nav-text">Administrar</span>
           </div>
+          <div class="nav-link" @click="goToUserManagement">
+            <span class="nav-icon">👥</span>
+            <span class="nav-text">Usuarios</span>
+          </div>
         </div>
         
         <div class="hamburger" @click="toggleMenu">
@@ -90,6 +94,10 @@ export default {
       this.$router.push('/live'); // La ruta sigue siendo la misma
       this.menuOpen = false;
     },
+    goToUserManagement() {
+      this.$router.push('/users');
+      this.menuOpen = false;
+    }
   },
 };
 </script>
