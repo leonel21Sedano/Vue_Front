@@ -71,8 +71,25 @@ export default {
       } catch (error) {
         console.error('Error durante el registro:', error);
         
-        // Siempre usamos el mensaje personalizado del interceptor
-        errorMessage.value = error.message;
+        // Manejar específicamente errores de duplicación (400)
+        if (error.response && error.response.status === 400) {
+          const data = error.response.data;
+          
+          // Determinar si tenemos errores de duplicación
+          if (data && typeof data === 'object') {
+            if (data.correo) {
+              errorMessage.value = data.correo;
+            } else if (data.codigoEstudiante) {
+              errorMessage.value = data.codigoEstudiante;
+            } else {
+              errorMessage.value = error.message;
+            }
+          } else {
+            errorMessage.value = error.message;
+          }
+        } else {
+          errorMessage.value = error.message;
+        }
         
         // Pero aún así registramos detalles completos para depuración
         if (error.response) {

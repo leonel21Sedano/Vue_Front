@@ -29,7 +29,7 @@ export default {
   setup(props, { emit }) {
     const router = useRouter();
     
-    // Variables reactivas para los campos
+    // These variables store the login credentials entered by the user
     const correo = ref('');
     const contraseña = ref('');
     const loading = ref(false);
@@ -45,7 +45,7 @@ export default {
         // Mostramos los datos que estamos enviando
         console.log('Datos enviados:', { correo: correo.value, contraseña: contraseña.value });
         
-        // Llamar al servicio de login
+        // This is where the credentials are passed to the authentication service
         const response = await AuthService.login(correo.value, contraseña.value);
         
         // Mostrar mensaje de éxito

@@ -123,7 +123,14 @@ class AuthService {
    * @returns {Promise} Promesa con la respuesta del servidor
    */
   registro(userData) {
-    return axios.post(API_URL + 'registro/estudiante', userData);
+    // Asegurémonos de que los nombres de los campos coinciden exactamente con lo que espera el backend
+    return axios.post(API_URL + 'registro/estudiante', {
+      nombre: userData.nombre,
+      apellidos: userData.apellidos,
+      correo: userData.correo,
+      contraseña: userData.contraseña,
+      codigoEstudiante: userData.codigoEstudiante
+    });
   }
 
   /**
@@ -133,13 +140,13 @@ class AuthService {
    * @returns {Promise} Promesa con la respuesta del servidor
    */
   login(correo, contraseña) {
+    // This is where the login API request is made with the credentials
     return axios.post(API_URL + 'login', {
       correo,
       contraseña
     }).then(response => {
-      // Si hay un token en la respuesta, guarda el usuario en localStorage
+      // If there's a token in the response, save the user in localStorage
       if (response.data.token) {
-        // Guardamos el objeto completo que incluye token, nombre, rol, etc.
         localStorage.setItem('user', JSON.stringify(response.data));
       }
       return response.data;
