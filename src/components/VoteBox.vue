@@ -5,7 +5,6 @@
         <slot name="left-name"></slot>
       </h3>
       <div class="team-box">
-        <!-- Imagen como placeholder, será reemplazada después -->
         <slot name="left-image">
           <div class="placeholder-image"></div>
         </slot>
@@ -13,8 +12,14 @@
       <p class="vote-count">
         <slot name="left-votes"></slot>
       </p>
-      <div class="box-button" @click="voteLeft">
-        <div class="button-inner"><span>Votar</span></div>
+      <div 
+        class="box-button" 
+        :class="{ 'disabled': disabledSide === 'left' || disabledSide === 'right' }" 
+        @click="disabledSide ? null : voteLeft()"
+      >
+        <div class="button-inner">
+          <span>{{ getButtonText('left') }}</span>
+        </div>
       </div>
     </div>
     
@@ -25,7 +30,6 @@
         <slot name="right-name"></slot>
       </h3>
       <div class="team-box">
-        <!-- Imagen como placeholder, será reemplazada después -->
         <slot name="right-image">
           <div class="placeholder-image"></div>
         </slot>
@@ -33,8 +37,14 @@
       <p class="vote-count">
         <slot name="right-votes"></slot>
       </p>
-      <div class="box-button" @click="voteRight">
-        <div class="button-inner"><span>Votar</span></div>
+      <div 
+        class="box-button" 
+        :class="{ 'disabled': disabledSide === 'right' || disabledSide === 'left' }" 
+        @click="disabledSide ? null : voteRight()"
+      >
+        <div class="button-inner">
+          <span>{{ getButtonText('right') }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -55,14 +65,26 @@ export default {
     rightOption: {
       type: Object,
       default: () => ({})
+    },
+    disabledSide: {
+      type: String,
+      default: null,
+      validator: (value) => value === null || value === 'left' || value === 'right'
     }
   },
   methods: {
     voteLeft() {
+      if (this.disabledSide) return;
       this.$emit('vote', { id: this.id, selection: 'left', option: this.leftOption });
     },
     voteRight() {
+      if (this.disabledSide) return;
       this.$emit('vote', { id: this.id, selection: 'right', option: this.rightOption });
+    },
+    getButtonText(side) {
+      if (!this.disabledSide) return "Votar";
+      if (this.disabledSide === side) return "Votado ✓";
+      return "Cerrado";
     }
   }
 };
@@ -164,5 +186,21 @@ export default {
   padding: 0;
   margin-bottom: 10px;
   transform: translateY(10px);
+}
+
+.box-button.disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background-color: #a0a0a0;
+}
+
+.box-button.disabled:hover {
+  transform: none;
+}
+
+.box-button.disabled:active {
+  padding-bottom: 10px;
+  margin-bottom: 0;
+  transform: none;
 }
 </style>
