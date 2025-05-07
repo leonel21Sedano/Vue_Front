@@ -1,8 +1,9 @@
 <template>
   <div class="brutalist-container">
     <input
-      :value="value"
-      @input="$emit('input', $event.target.value)"
+      :value="modelValue"
+      @input="$emit('update:modelValue', $event.target.value)"
+      @keyup.enter="$emit('search')"
       :placeholder="placeholder"
       class="brutalist-input smooth-type"
       type="text"
@@ -15,7 +16,7 @@
 export default {
   name: 'BrutalistSearchBar',
   props: {
-    value: {
+    modelValue: {
       type: String,
       default: ''
     },
@@ -27,7 +28,8 @@ export default {
       type: String,
       default: 'BRUTALIST'
     }
-  }
+  },
+  emits: ['update:modelValue', 'search']
 };
 </script>
 

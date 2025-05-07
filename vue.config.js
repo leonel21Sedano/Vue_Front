@@ -6,5 +6,13 @@ module.exports = {
         changeOrigin: true
       }
     }
+  },
+  configureWebpack: {
+    node: {
+      // Elimina la propiedad 'util' que no es válida
+      __dirname: true,
+      __filename: true,
+      global: true
+    }
   }
 };
