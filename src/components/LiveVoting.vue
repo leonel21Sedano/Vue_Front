@@ -70,29 +70,15 @@
 <script>
 import VoteBox from './VoteBox.vue';
 
+import { foodOptionsStore } from '../store/foodOptionsStore';
+
 export default {
   name: 'LiveVoting',
   components: {
     VoteBox
   },
-  data() {
-    return {
-      // Datos para las votaciones
-      votingOptions: {
-        comidas: [
-          { id: 0, name: 'Tacos', votes: 15, image: require('../assets/Delicious Tacos Al Pastor.jpeg') },
-          { id: 1, name: 'Hamburguesa', votes: 12, image: require('../assets/Hamburguesa.jpeg') }
-        ],
-        bebidas: [
-          { id: 0, name: 'Agua Fresca', votes: 8, image: require('../assets/logo.png') },
-          { id: 1, name: 'Refresco', votes: 10, image: require('../assets/logo.png') }
-        ],
-        postres: [
-          { id: 0, name: 'Flan', votes: 7, image: require('../assets/logo.png') },
-          { id: 1, name: 'Pastel', votes: 11, image: require('../assets/logo.png') }
-        ]
-      }
-    };
+  setup() {
+    return { votingOptions: foodOptionsStore };
   },
   methods: {
     handleVote(voteData) {
@@ -100,7 +86,7 @@ export default {
       
       const { id, selection } = voteData;
       const optionIndex = selection === 'left' ? 0 : 1;
-      this.votingOptions[id][optionIndex].votes += 1;
+      foodOptionsStore[id][optionIndex].votes += 1;
       
       // Aquí se podría agregar lógica para enviar el voto al backend
     }

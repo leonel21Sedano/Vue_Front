@@ -160,29 +160,15 @@
 <script>
 import VoteBox from './VoteBox.vue';
 
+import { foodOptionsStore } from '../store/foodOptionsStore';
+
 export default {
   name: 'PostFood',
   components: {
     VoteBox
   },
-  data() {
-    return {
-      // Opciones para la votación
-      foodOptions: {
-        comidas: [
-          { id: 0, name: '', votes: 0, image: null },
-          { id: 1, name: '', votes: 0, image: null }
-        ],
-        bebidas: [
-          { id: 0, name: '', votes: 0, image: null },
-          { id: 1, name: '', votes: 0, image: null }
-        ],
-        postres: [
-          { id: 0, name: '', votes: 0, image: null },
-          { id: 1, name: '', votes: 0, image: null }
-        ]
-      }
-    };
+  setup() {
+    return { foodOptions: foodOptionsStore };
   },
   methods: {
     handleImageUpload(event, category, index) {
@@ -190,17 +176,14 @@ export default {
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          this.foodOptions[category][index].image = e.target.result;
+          foodOptionsStore[category][index].image = e.target.result;
         };
         reader.readAsDataURL(file);
       }
     },
     guardarOpciones() {
-      // Aquí podrías implementar la lógica para guardar las opciones en el backend
-      console.log('Opciones guardadas:', this.foodOptions);
-      
-      // Ejemplo de validación simple
-      const allOptionsValid = Object.values(this.foodOptions).every(category => {
+      // Validación simple
+      const allOptionsValid = Object.values(foodOptionsStore).every(category => {
         return category.every(option => option.name.trim() !== '');
       });
       
@@ -210,6 +193,7 @@ export default {
       }
       
       alert('Opciones guardadas correctamente. Se publicarán en la página de votaciones.');
+      console.log('Opciones guardadas:', foodOptionsStore);
     }
   }
 };
