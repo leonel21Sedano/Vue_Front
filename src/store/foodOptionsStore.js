@@ -37,3 +37,23 @@ export const foodOptionsStore = initialState;
 export const saveOptionsState = () => {
   localStorage.setItem('votingOptions', JSON.stringify(foodOptionsStore));
 };
+
+// Función para reiniciar todos los votos
+export const resetAllVotes = () => {
+  Object.keys(foodOptionsStore).forEach(category => {
+    foodOptionsStore[category].forEach(option => {
+      option.votes = 0;
+    });
+  });
+  saveOptionsState();
+  
+  // También eliminar todos los registros de votos de usuarios
+  const keys = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith('userVotes_')) {
+      keys.push(key);
+    }
+  }
+  keys.forEach(key => localStorage.removeItem(key));
+};

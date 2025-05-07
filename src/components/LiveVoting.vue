@@ -95,7 +95,8 @@ export default {
   data() {
     return {
       votingOptions: foodOptionsStore,
-      userVotes: {}
+      userVotes: {},
+      optionsVersion: JSON.stringify(foodOptionsStore) // Versión actual de las opciones
     };
   },
   computed: {
@@ -112,19 +113,74 @@ export default {
   created() {
     // Cargar votos previos del usuario actual
     this.loadUserVotes();
+    
+    // Escuchar cambios en localStorage (para detectar reinicio de votaciones)
+    window.addEventListener('storage', this.handleStorageChange);
+  },
+  beforeUnmount() {
+    // Remover listener al desmontar el componente
+    window.removeEventListener('storage', this.handleStorageChange);
   },
   watch: {
     // Observar cambios en el usuario actual para recargar votos
     currentUserIdentifier() {
       this.loadUserVotes();
+    },
+    // Observar cambios en las opciones de votación (por si se reinician)
+    votingOptions: {
+      handler(newOptions) {
+        const newVersion = JSON.stringify(newOptions);
+        if (this.optionsVersion !== newVersion) {
+          this.optionsVersion = newVersion;
+          this.loadUserVotes(); // Recargar votos cuando cambian las opciones
+        }
+      },
+      deep: true
     }
   },
   methods: {
+    handleStorageChange(event) {
+      // Si las opciones de votación cambiaron (otro admin reinició las votaciones)
+      if (event.key === 'votingOptions') {
+        // Recargar las opciones de votación
+        try {
+          const newOptions = JSON.parse(event.newValue);
+          Object.keys(newOptions).forEach(category => {
+            this.votingOptions[category] = newOptions[category];
+          });
+          this.optionsVersion = event.newValue;
+        } catch (e) {
+          console.error('Error al procesar cambio en opciones:', e);
+        }
+      }
+      
+      // Si se borraron los votos del usuario actual
+      if (event.key === this.userVotesKey && !event.newValue) {
+        this.loadUserVotes();
+      }
+    },
+    
     loadUserVotes() {
       // Cargar votos específicos para el usuario actual
       const savedVotes = localStorage.getItem(this.userVotesKey);
       if (savedVotes) {
         this.userVotes = JSON.parse(savedVotes);
+        
+        // Verificar que los votos sean válidos para las opciones actuales
+        Object.keys(this.userVotes).forEach(category => {
+          const voteInfo = this.userVotes[category];
+          const optionIndex = voteInfo.selection === 'left' ? 0 : 1;
+          
+          // Si la opción ya no existe o cambió de nombre, borrar el voto
+          if (!this.votingOptions[category] || 
+              !this.votingOptions[category][optionIndex] ||
+              this.votingOptions[category][optionIndex].name !== voteInfo.optionName) {
+            delete this.userVotes[category];
+          }
+        });
+        
+        // Guardar los votos actualizados
+        localStorage.setItem(this.userVotesKey, JSON.stringify(this.userVotes));
       } else {
         // Reiniciar votos si no hay datos para el usuario actual
         this.userVotes = {};

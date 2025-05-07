@@ -2,6 +2,14 @@
   <div class="post-food-page">
     <h1 class="page-title">Administrar Votaciones</h1>
 
+    <!-- Acciones generales -->
+    <div class="actions-container">
+      <button @click="saveOptions" class="save-button">Guardar Cambios</button>
+      <button @click="resetAllVotes" class="reset-button">Reiniciar Votaciones</button>
+    </div>
+    
+    <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
+
     <!-- Sección de comidas -->
     <div class="section">
       <h2 class="section-title">Comidas del Día</h2>
@@ -148,42 +156,28 @@
         </div>
       </div>
     </div>
-    
-    <div class="submit-container">
-      <div class="box-button" @click="guardarOpciones">
-        <div class="button-inner"><span>Guardar Opciones</span></div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
 import VoteBox from './VoteBox.vue';
-
-import { foodOptionsStore } from '../store/foodOptionsStore';
+import { foodOptionsStore, saveOptionsState } from '../store/foodOptionsStore';
 
 export default {
   name: 'PostFood',
   components: {
     VoteBox
   },
-  setup() {
-    return { foodOptions: foodOptionsStore };
+  data() {
+    return {
+      foodOptions: foodOptionsStore,
+      successMessage: ''
+    };
   },
   methods: {
-    handleImageUpload(event, category, index) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          foodOptionsStore[category][index].image = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    },
-    guardarOpciones() {
+    saveOptions() {
       // Validación simple
-      const allOptionsValid = Object.values(foodOptionsStore).every(category => {
+      const allOptionsValid = Object.values(this.foodOptions).every(category => {
         return category.every(option => option.name.trim() !== '');
       });
       
@@ -191,9 +185,68 @@ export default {
         alert('Por favor completa todos los nombres de las opciones.');
         return;
       }
+
+      // Reiniciar los contadores de votos para todas las opciones
+      this.resetAllVotes(false);
       
-      alert('Opciones guardadas correctamente. Se publicarán en la página de votaciones.');
-      console.log('Opciones guardadas:', foodOptionsStore);
+      // Guardar las opciones en localStorage
+      saveOptionsState();
+      
+      // Mostrar mensaje de éxito
+      this.successMessage = 'Cambios guardados y votaciones reiniciadas correctamente';
+      
+      // Ocultar mensaje después de unos segundos
+      setTimeout(() => {
+        this.successMessage = '';
+      }, 3000);
+    },
+    
+    resetAllVotes(showMessage = true) {
+      // Reiniciar los contadores de votos
+      Object.keys(this.foodOptions).forEach(category => {
+        this.foodOptions[category].forEach(option => {
+          option.votes = 0;
+        });
+      });
+      
+      // Eliminar todos los registros de votos de usuarios
+      this.clearAllUserVotes();
+      
+      // Actualizar el estado global
+      saveOptionsState();
+      
+      // Mostrar mensaje de éxito (solo si se solicita)
+      if (showMessage) {
+        this.successMessage = 'Votaciones reiniciadas correctamente';
+        setTimeout(() => {
+          this.successMessage = '';
+        }, 3000);
+      }
+    },
+    
+    clearAllUserVotes() {
+      // Eliminar todos los registros de votos guardados en localStorage
+      const keys = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith('userVotes_')) {
+          keys.push(key);
+        }
+      }
+      
+      // Eliminar cada clave de userVotes
+      keys.forEach(key => localStorage.removeItem(key));
+    },
+    
+    handleImageUpload(event, category, index) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.foodOptions[category][index].image = e.target.result;
+      };
+      reader.readAsDataURL(file);
     }
   }
 };
@@ -318,42 +371,75 @@ export default {
   font-size: 1.2rem;
 }
 
-.submit-container {
-  margin-top: 20px;
+.actions-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
+  width: 100%;
+  margin-bottom: 30px;
+  gap: 20px;
 }
 
-.box-button {
+.save-button, .reset-button {
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  border-radius: 8px;
   cursor: pointer;
-  border: 4px solid black;
-  background-color: #6a11cb;
-  padding-bottom: 10px;
-  transition: 0.1s ease-in-out;
-  user-select: none;
-  width: 180px;
+  transition: all 0.2s ease;
+  font-weight: bold;
+  min-width: 200px;
   text-align: center;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-.box-button:hover {
+.save-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.save-button:hover {
+  background-color: #388E3C;
   transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0,0,0,0.15);
 }
 
-.button-inner {
-  background-color: #dddddd;
-  border: 4px solid #fff;
-  padding: 3px 8px;
+.reset-button {
+  background-color: #F44336;
+  color: white;
 }
 
-.button-inner span {
-  font-size: 1.2em;
-  letter-spacing: 1px;
-  font-family: Arial, sans-serif;
+.reset-button:hover {
+  background-color: #D32F2F;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0,0,0,0.15);
 }
 
-.box-button:active {
-  padding: 0;
-  margin-bottom: 10px;
-  transform: translateY(10px);
+.save-button:active, .reset-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+}
+
+.success-message {
+  background-color: #E8F5E9;
+  color: #2E7D32;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: bold;
+  border: 1px solid #C8E6C9;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .actions-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .save-button, .reset-button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 }
 </style>
