@@ -18,19 +18,15 @@
       <div class="info-card">
         <div class="card-icon">🍽️</div>
         <h2>Nuestro Propósito</h2>
-        <p>En CPT (Comida, Pizza, Tacos), nuestra misión es simplificar la elección de alimentos para eventos, reuniones y pedidos grupales. Facilitamos el proceso de votación para que todos puedan elegir su comida favorita.</p>
+        <p>Nuestro proposito es impulsar la variedad de alimentos que se ofrecen en el comedor de CUTonala.</p>
       </div>
 
-      <div class="info-card">
-        <div class="card-icon">📊</div>
-        <h2>Cómo Funciona</h2>
-        <p>Registra tu cuenta, crea una votación para comidas, bebidas, postres y comparte con tus amigos o colegas. Todos pueden votar y el sistema contabilizará automáticamente las preferencias más populares.</p>
-      </div>
+      
 
       <div class="info-card">
         <div class="card-icon">👥</div>
         <h2>Para Quién Es</h2>
-        <p>Perfecto para grupos de estudiantes, oficinas, reuniones familiares o cualquier situación donde necesites decidir qué comer en grupo sin las típicas discusiones interminables.</p>
+        <p>Va dirigido para personas de CUTonala para la eleccion de sus alimentos que se ofrecen en el comedor, para poder salir de la rutina de comer siempre lo mismo o eliegir alimentos mas saludables.</p>
       </div>
     </div>
 
@@ -40,7 +36,7 @@
         <div class="feature">
           <div class="feature-icon">🗳️</div>
           <h3>Votaciones Sencillas</h3>
-          <p>Interfaz intuitiva para crear y participar en votaciones</p>
+          <p>Interfaz intuitiva participar en votaciones</p>
         </div>
         <div class="feature">
           <div class="feature-icon">📱</div>
@@ -51,11 +47,6 @@
           <div class="feature-icon">🔒</div>
           <h3>Seguridad de Datos</h3>
           <p>Tu información personal está protegida</p>
-        </div>
-        <div class="feature">
-          <div class="feature-icon">📊</div>
-          <h3>Estadísticas en Tiempo Real</h3>
-          <p>Ve los resultados de las votaciones al instante</p>
         </div>
       </div>
     </div>
@@ -258,6 +249,10 @@ export default {
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 30px;
   margin-top: 40px;
+  justify-items: center; /* Centra los elementos horizontalmente en la grid */
+  max-width: 1000px; /* Limita el ancho máximo para mejor presentación */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .feature {
@@ -266,6 +261,12 @@ export default {
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.05);
   transition: all 0.3s ease;
+  text-align: center; /* Centra el texto dentro de cada feature */
+  width: 100%; /* Asegura que todos tengan el mismo ancho */
+  max-width: 300px; /* Establece un ancho máximo para cada feature */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra elementos como el ícono */
 }
 
 .feature:hover {
@@ -275,6 +276,15 @@ export default {
 .feature-icon {
   font-size: 35px;
   margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70px;
+  height: 70px;
+  background-color: #f0e6ff;
+  border-radius: 50%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .feature h3 {
@@ -283,12 +293,14 @@ export default {
   color: #6a11cb;
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
+  width: 100%; /* Asegura que ocupe todo el ancho disponible */
 }
 
 .feature p {
   color: #777;
   font-size: 0.9rem;
   font-family: Arial, sans-serif;
+  width: 100%; /* Asegura que ocupe todo el ancho disponible */
 }
 
 .footer {
@@ -317,6 +329,14 @@ export default {
   
   .box-button {
     margin-bottom: 15px;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr; /* Una sola columna en móviles */
+  }
+  
+  .feature {
+    max-width: 100%; /* Ocupa todo el ancho disponible en móviles */
   }
 }
 </style>
