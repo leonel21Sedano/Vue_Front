@@ -64,6 +64,14 @@
       <p>&copy; 2024 CPT - Todos los derechos reservados</p>
     </footer>
   </div>
+
+  <div class="navbar-links">
+    <!-- Otros enlaces del navbar -->
+    <div class="nav-link" @click="openSwaggerDocs">
+      <span class="nav-icon">📚</span>
+      <span class="nav-text">API Docs</span>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -75,6 +83,10 @@ export default {
     },
     goToRegister() {
       this.$router.push('/register');
+    },
+    openSwaggerDocs() {
+      // Abre Swagger UI en una nueva pestaña
+      window.open('http://localhost:8081/swagger-ui/index.html', '_blank');
     }
   }
 };
